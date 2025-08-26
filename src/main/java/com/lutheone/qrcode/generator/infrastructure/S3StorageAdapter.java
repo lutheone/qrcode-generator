@@ -2,6 +2,7 @@ package com.lutheone.qrcode.generator.infrastructure;
 
 import com.lutheone.qrcode.generator.ports.StoragePort;
 import org.springframework.beans.factory.annotation.Value;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -14,22 +15,26 @@ public class S3StorageAdapter implements StoragePort {
     private final String region;
 
     public S3StorageAdapter(@Value("${aws.region}") String region,
-                            @Value("${aws.s3.bucket-name}") String bucketName,
-                            S3Client s3Client) {
-        this.s3Client = s3Client;
+                            @Value("${aws.s3.bucket-name}") String bucketName) {
         this.bucketName = bucketName;
+        this.region = region;
+        this.s3Client = S3Client.builder()
+                .region(Region.of(this.region))
+                .build();
     }
 
     @Override
     public String uploadFile(byte[] filedata, String fileName, String contentType) {
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(filedata.length);
-        metadata.setContentType(contentType);
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(fileName)
+                .contentType(contentType)
+                .build();
 
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(filedata);
-        putObjectRequest request = new PutObjectRequest(bucketName, fileName, byteArrayInputStream, metadata)
-                .withCannedAcl(CannedAccessControlList.PublicRead);
-        s3Client.putObject(request);
+        s3Client.putObject(putObjectRequest, software.amazon.awssdk.core.sync.RequestBody
+                .fromBytes(filedata));
 
-        return s3Client.getUrl(bucketName, fileName).toString();
-}
+        return String.format("https://%s.s3.%s.amazonaws.com/%s", bucketName, region, fileName);
+
+    }
+        }
