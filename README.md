@@ -85,7 +85,7 @@ Gera um QR code a partir do texto fornecido e o armazena no AWS S3. O QR code se
 
 ```json
 {
-    "url": "https://your-bucket.s3.your-region.amazonaws.com/random-uuid"
+    "url": "https://github.com/lutheone"
 }
 ```
 
