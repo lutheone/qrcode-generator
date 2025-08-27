@@ -13,7 +13,7 @@ Este é um aplicativo Spring Boot que gera códigos QR e os armazena no AWS S3. 
 
 ### Pré-requisitos
 
-- Java 21 JDK
+- Java 17 JDK (ou superior)
 - Maven
 - Docker
 - Conta AWS com acesso ao S3
