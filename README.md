@@ -1,6 +1,6 @@
 ### QR Code Generator
 
-![Java](https://img.shields.io/badge/Java-21-orange)
+![Java](https://img.shields.io/badge/Java-17-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.4-brightgreen)
 ![AWS SDK](https://img.shields.io/badge/AWS%20SDK-2.24.12-yellow)
 ![Google ZXing](https://img.shields.io/badge/Google%20ZXing-3.5.2-blue)
